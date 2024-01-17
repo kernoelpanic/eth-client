@@ -1,0 +1,28 @@
+# fix for:
+# error: invalid command 'bdist_wheel' (arm64)
+wheel
+
+## smart contract related ##
+web3 
+pysha3
+py-solc
+#eth-testrpc
+
+## dependencies for interaction with ethereum directly ##
+leveldb
+ethereum # pyethereum 
+
+## for bitcoin
+bitcoinlib
+
+## other required python packages ##
+#py-ecc
+pytest
+sympy
+requests
+
+# jupyter (old) and jupyter-lab environment
+ipython
+jupyter
+jupyterlab
+

@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+  anvil:
+    # simulates an ethereum blockchain for local testing
+    container_name: anvil-cnt
+    image: "ghcr.io/foundry-rs/foundry"
+    # Command does not work as described in: https://docs.docker.com/compose/compose-file/05-services/#command
+    # Use the following work around to get the command with arguments s.t. they look like this:  
+    # $ anvil --host 0.0.0.0 --balance 1000 --mnemonic 'negative vintage rhythm moral state journey smart fiscal crush poet smooth blossom dose pencil else' --gas-limit 80000000" 
+    #command: anvil --host 0.0.0.0 --balance 1000 --mnemonic 'negative vintage rhythm moral state journey smart fiscal crush poet smooth blossom dose pencil else' --gas-limit 80000000
+    command: ["anvil --host 0.0.0.0 --balance 1000 --mnemonic 'negative vintage rhythm moral state journey smart fiscal crush poet smooth blossom dose pencil else' --gas-limit 80000000"]
+    #ports:
+      #- '127.0.0.1:8545:8545' # expose for host
+    restart: unless-stopped
+
+  geth-client:
+    # geth execution node client, used to connect to other geth nodes (i.e., our PoA node)
+    container_name: geth-client-cnt
+    build:
+      context: ./geth
+      dockerfile: ./Containerfile
+    #ports:
+      #- '127.0.0.1:8545:8545' # expose for host
+      #- '0.0.0.0:8545:8545' # expose for everybody
+    restart: unless-stopped
+    # geth takes some time to shutdown gracefully and might corrupt local state
+    # if it is not given this time. Moreover, geth used to not handle SIGTERM gracefully.
+    # It required SIGINT, to behave like a SIGTERM ... 
+    # https://github.com/ethereum/go-ethereum/issues/16131 
+    # To change signals sent by docker see: 
+    # https://kmg.group/posts/2022-05-23-docker-stop-containers-with-signals/
+    stop_grace_period: 1m
+    stop_signal: SIGINT
+    volumes:
+      - ./geth/:/app
+      # load your own keystore file from outside
+      - ../keystore/:/app/datadir/bob/keystore/
+
+  notebook:
+    # jupyter notebook used to connect to geth-client-cnt
+    container_name: notebookcnt
+    build:
+      context: ./notebook
+      dockerfile: ./Containerfile
+    ports: 
+      - '127.0.0.1:8888:8888'
+    volumes:
+      # overwrite working dir directory and use local disk files
+      - ./notebook:/smartenv
+      - ./geth/:/smartenv/geth
+      # load your own keystore file from outside
+      - ../keystore/:/keystore
+# EOF

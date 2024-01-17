@@ -1,0 +1,7 @@
+*.pyc
+.ipynb_checkpoints
+/__pycache__
+/venv
+/geth
+/setup
+/solutions
