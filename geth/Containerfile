@@ -100,6 +100,7 @@ RUN cp "$WORKDIR_CONTAINER"/src-clients/go-ethereum/build/bin/geth /usr/local/bi
 
 # change final user
 USER $UNAME
+RUN mkdir -p $WORKDIR_CONTAINER/datadir/bob/keystore/
 
 # Done with docker file
 RUN echo "DONE WITH DOCKERFILE"
