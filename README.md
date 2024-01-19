@@ -13,6 +13,14 @@ relative to the repository folder for the docker volumes:
 
 The directories should exist for `docker-compose up` to work without errors.
 
+You could add them like this:
+
+```
+$ mkdir ../keystore
+$ mkdir -p geth/datadir/bob/keystore
+$ mkdir notebook/geth
+```
+
 Place your private key file (in json format) in a folder called `../keystore`  outside this repository.
 Then run the following commands (the first build might take a while because it fetches and builds geth from source).
 ```bash
