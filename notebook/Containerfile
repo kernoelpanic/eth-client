@@ -17,30 +17,30 @@ RUN groupadd -g $GID -o $UNAME
 RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
 
 # update and upgrade
-RUN apt-get update 
+RUN apt-get update
 RUN apt-get dist-upgrade -y
 
-# Configure timezone 
+# Configure timezone
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # basic python3.8 setup
-# To be explicit and use pip3 to install packages  
+# To be explicit and use pip3 to install packages
 # can be installed by invoking like this:
-# python3 -m pip --version    
+# python3 -m pip --version
 RUN apt-get install -y python3 python3-dev \
   && apt-get install -y python3-pip \
   && apt-get install -y python3-venv virtualenv \
   && cd /usr/local/bin \
-  && ln -s /usr/bin/python3 python 
+  && ln -s /usr/bin/python3 python
 
-# requirements for building underlying packages when installing required python modules later 
-# e.g., secp256k1 
+# requirements for building underlying packages when installing required python modules later
+# e.g., secp256k1
 RUN apt-get install -y build-essential pkg-config autoconf libtool libssl-dev libffi-dev libgmp-dev libsecp256k1-0 libsecp256k1-dev
 
-# Required system tools 
+# Required system tools
 RUN apt-get install -y git wget curl
-# Additional system tools 
+# Additional system tools
 RUN apt-get install -y vim iputils-ping netcat iproute2 sudo
 
 
@@ -69,7 +69,7 @@ RUN mkdir -p /tmp/gethtools \
 
 # upgrade pip and install requirements for python3.7 which have been previously added to /smartcode
 RUN python3 -m pip install --upgrade pip
-#RUN python3 -m pip install -r requirements.txt
+RUN python3 -m pip install -r requirements.txt
 
 # port jupyter
 EXPOSE 8888
