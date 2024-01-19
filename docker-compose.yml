@@ -31,6 +31,7 @@ services:
     # https://kmg.group/posts/2022-05-23-docker-stop-containers-with-signals/
     stop_grace_period: 1m
     stop_signal: SIGINT
+    user: ${UID}:${GID}
     volumes:
       - ./geth/:/app
       # load your own keystore file from outside
@@ -44,6 +45,7 @@ services:
       dockerfile: ./Containerfile
     ports: 
       - '127.0.0.1:8888:8888'
+    user: ${UID}:${GID}
     volumes:
       # overwrite working dir directory and use local disk files
       - ./notebook:/smartenv

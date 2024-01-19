@@ -7,7 +7,9 @@ This ethereum smart contract test environment is used in the lecture [Security a
 Place your private key file (in json format) in a folder called `../keystore`  outside this repository. 
 Then run
 ```bash
-$ docker compose up -d
+$ UID=$(id -u) GID=$(id -g) docker compose up -d  
+# or
+$ UID=${UID} GID=${GID} docker compose up -d  
 ```
 If you want to rebuild the containers run `docker compose up --build`.
 You can access all containers log output via `docker compose logs --follow`.
