@@ -5,16 +5,32 @@ This ethereum smart contract test environment is used in the lecture [Security a
 ## For students
 
 Place your private key file (in json format) in a folder called `../keystore`  outside this repository. 
-Then run
+Then run the following commands (the first build might take a while because it fetches and builds geth from source). 
 ```bash
-$ UID=$(id -u) GID=$(id -g) docker compose up -d  
-# or
-$ UID=${UID} GID=${GID} docker compose up -d  
+$ docker compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) 
+# the run the containers 
+$ docker compose up -d  
 ```
-If you want to rebuild the containers run `docker compose up --build`.
-You can access all containers log output via `docker compose logs --follow`.
+You can access the log output of all running containers `docker compose logs --follow`.
 
-Connect to your local jupyter notebook, the url will be in the logs of the `notebook` container (`notebookcnt`).
+If your `geth-client-cnt` experience issues starting up, try to fix the permissions on the `geth/datadir`
+directory:
+```bash
+$ chown -R o+x,o+r,o+w geth/datadir
+```
+
+If your `notebook-cnt` experiences issues such as:
+```bash
+...
+notebookcnt      | /smartenv/entrypoint.sh: line 33: exec: jupyter-lab: not found
+...
+```
+Try to remove the python virtual env directory which is used in the volume inside the container:
+```bash
+$ rm -r notebook/venv
+```
+
+Connect to your local jupyter notebook, the url will be in the logs of the `notebook` container (`docker compose logs notebookcnt`).
 Then check the connection to our geth PoA node by going over the connection test notebook
 [connection_test.ipynb](./notebook/connection_test.ipynb).
 
