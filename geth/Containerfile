@@ -1,4 +1,4 @@
-# Dockerfile for smart contract 
+# Dockerfile for smart contract
 # geth environment
 
 # Overview of ubuntu docker images
@@ -14,27 +14,28 @@ ARG WORKDIR_CONTAINER=/app
 WORKDIR $WORKDIR_CONTAINER
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
-
+RUN mkdir -p $WORKDIR_CONTAINER/datadir/bob/keystore/
+RUN chown -R $UID:$GID $WORKDIR_CONTAINER
 ### copy files in build container ###
 # copy git repository if available
 #COPY --chown=$UID:$GID ./src-clients/go-ethereum/ "$WORKDIR_CONTAINER"/src-clients/go-ethereum/
 
 ### update, upgrade and install basic tools ###
-RUN apt update 
+RUN apt update
 RUN apt dist-upgrade -y
-# Required system tools 
+# Required system tools
 RUN apt install -y git wget curl
-# Additional system tools 
+# Additional system tools
 RUN apt install -y vim iputils-ping netcat iproute2 sudo
 
 ### Install dependencies for geth build ###
 # to avoid prompt for tzdata
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt install -y build-essential make 
+RUN apt install -y build-essential make
 
 ### Install dependencies for geth devtools build ###
-# Install solc 
+# Install solc
 # https://github.com/ethereum/solidity/releases/
 RUN cd /usr/local/bin \
   && wget -qO solc_4.25 https://github.com/ethereum/solidity/releases/download/v0.4.25/solc-static-linux \
@@ -45,8 +46,9 @@ RUN cd /usr/local/bin \
   && wget -qO solc_8.23 https://github.com/ethereum/solidity/releases/download/v0.8.23/solc-static-linux \
   && cp solc_8.23 solc \
   && chmod 755 solc*
+
 # Install npm
-RUN apt install -y npm
+# RUN apt install -y npm
 
 # Install google protocol buffers command line tool (protoc)
 # https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0-rc2/protoc-3.14.0-rc-2-linux-x86_64.zip
@@ -57,7 +59,6 @@ RUN cd /usr/local/bin \
 
 ### Install go ###
 # Ref: https://golang.org/doc/install
-RUN chown $UID.$GID $WORKDIR_CONTAINER
 USER $UNAME
 #RUN wget --progress=bar:force:noscroll -P /smartenv/ https://golang.org/dl/go1.15.4.linux-amd64.tar.gz
 RUN wget --progress=bar:force:noscroll -P "$WORKDIR_CONTAINER"/ https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
@@ -78,7 +79,7 @@ RUN if test -d "$WORKDIR_CONTAINER"/src-clients/go-ethereum/.git ; \
     fi
 
 ### Build geth version ###
-# if not already built 
+# if not already built
 # Ref: https://github.com/ethereum/go-ethereum/wiki/Installation-Instructions-for-Ubuntu
 # Latest stable branch: https://github.com/ethereum/go-ethereum/releases
 ARG VERSIONTAG=v1.10.3
@@ -100,7 +101,6 @@ RUN cp "$WORKDIR_CONTAINER"/src-clients/go-ethereum/build/bin/geth /usr/local/bi
 
 # change final user
 USER $UNAME
-RUN mkdir -p $WORKDIR_CONTAINER/datadir/bob/keystore/
 
 # Done with docker file
 RUN echo "DONE WITH DOCKERFILE"
