@@ -3,14 +3,16 @@
 wheel
 
 ## smart contract related ##
-web3 
+web3
 pysha3
 py-solc
+# https://web3py.readthedocs.io/en/stable/web3.contract.html – recommended
+py-solc-x
 #eth-testrpc
 
 ## dependencies for interaction with ethereum directly ##
 leveldb
-ethereum # pyethereum 
+ethereum # pyethereum
 
 ## for bitcoin
 bitcoinlib
@@ -25,4 +27,3 @@ requests
 ipython
 jupyter
 jupyterlab
-
