@@ -6,7 +6,7 @@ PYTHON_REQUIREMENTS="./requirements.txt"
 echo "Running entrypoint script..."
 
 if [ -z "${1}" ] && [ -z "${CONTAINER_PORT+x}" ];
-then 
+then
 	export CONTAINER_PORT=8888
 elif [ ! -z "${1}" ];
 then
@@ -28,6 +28,6 @@ else
   python -m pip install -r ${PYTHON_REQUIREMENTS}
 fi
 
-. ${PYTHON_VENV_PATH}/bin/activate 
+. ${PYTHON_VENV_PATH}/bin/activate
 #jupyter notebook --ip "0.0.0.0" --port ${CONTAINER_PORT}
 exec jupyter-lab --ip "0.0.0.0" --port ${CONTAINER_PORT}
