@@ -1,0 +1,101 @@
+[Eth]
+NetworkId = 20240101
+SyncMode = "full"
+EthDiscoveryURLs = []
+SnapDiscoveryURLs = []
+NoPruning = false
+NoPrefetch = false
+TxLookupLimit = 2350000
+LightPeers = 100
+UltraLightFraction = 75
+DatabaseCache = 512
+DatabaseFreezer = ""
+TrieCleanCache = 154
+TrieCleanCacheJournal = "triecache"
+TrieCleanCacheRejournal = 3600000000000
+TrieDirtyCache = 256
+TrieTimeout = 3600000000000
+SnapshotCache = 102
+Preimages = false
+EnablePreimageRecording = false
+EWASMInterpreter = ""
+EVMInterpreter = ""
+RPCGasCap = 25000000
+RPCTxFeeCap = 1e+00
+
+[Eth.Miner]
+GasFloor = 8000000
+GasCeil = 8000000
+GasPrice = 1000000000
+Recommit = 3000000000
+Noverify = false
+
+[Eth.Ethash]
+CacheDir = "ethash"
+CachesInMem = 2
+CachesOnDisk = 3
+CachesLockMmap = false
+DatasetDir = "/home/smartenv/.ethash"
+DatasetsInMem = 1
+DatasetsOnDisk = 2
+DatasetsLockMmap = false
+PowMode = 0
+NotifyFull = false
+
+[Eth.TxPool]
+Locals = []
+NoLocals = false
+Journal = "transactions.rlp"
+Rejournal = 3600000000000
+PriceLimit = 1
+PriceBump = 10
+AccountSlots = 16
+GlobalSlots = 4096
+AccountQueue = 64
+GlobalQueue = 1024
+Lifetime = 10800000000000
+
+[Eth.GPO]
+Blocks = 20
+Percentile = 60
+MaxPrice = 500000000000
+
+[Node]
+UserIdent = "bob"
+DataDir = "/app/datadir/bob"
+InsecureUnlockAllowed = true
+IPCPath = ""
+HTTPHost = "0.0.0.0"
+HTTPPort = 8545
+HTTPCors = ["*"]
+HTTPVirtualHosts = ["*"]
+HTTPModules = ["eth", "net", "web3", "personal", "debug", "admin", "miner", "txpool", "clique"]
+WSHost = ""
+WSPort = 8546
+WSModules = ["net", "web3", "eth"]
+GraphQLVirtualHosts = ["localhost"]
+
+[Node.P2P]
+MaxPeers = 50
+NoDiscovery = true
+BootstrapNodes = []
+BootstrapNodesV5 = []
+StaticNodes = ["enode://fd90f39e40633934f1613ab08bd4917d3aa28abba28cc4748b544650cfffe1ab40890f4a9d85ca9c0cf28845633291ca06a5716b86f5232b32374b82e2e3cff6@eth-smart.secenv:30303?discport=0"]
+TrustedNodes = []
+ListenAddr = ":30303"
+EnableMsgEvents = false
+
+[Node.HTTPTimeouts]
+ReadTimeout = 30000000000
+WriteTimeout = 30000000000
+IdleTimeout = 120000000000
+
+[Metrics]
+Enabled = true
+HTTP = "127.0.0.1"
+Port = 6060
+InfluxDBEndpoint = "http://localhost:8086"
+InfluxDBDatabase = "geth"
+InfluxDBUsername = "test"
+InfluxDBPassword = "test"
+InfluxDBTags = "host=localhost"
