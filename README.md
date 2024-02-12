@@ -35,7 +35,7 @@ containers (`docker-compose down` followed by `up -d`)
 or try to fix the permissions on the `geth/datadir`
 directory:
 ```bash
-$ chown -R o+x,o+r,o+w geth/datadir
+$ chmod -R o+x,o+r,o+w geth/datadir
 ```
 
 In some cases, deleting the `geth/datadir/bob/geth` folder and
