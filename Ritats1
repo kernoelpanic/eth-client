@@ -1,0 +1,94 @@
+[tool.poetry]
+name = "gmail-fetch-ai"
+version = "0.1.0"
+description = "A project to fetch emails from a Gmail account using Fetch AI."
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+google-auth = "^2.6.0"
+google-auth-oauthlib = "^0.4.1"
+google-auth-httplib2 = "^0.1.0"
+google-api-python-client = "^2.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+import os
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+CREDENTIALS_FILE = 'credentials.json'
+
+def get_service():
+    creds = None
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                CREDENTIALS_FILE, SCOPES)
+            creds = flow.run_local_server(port=0)
+
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    service = build('gmail', 'v1', credentials=creds)
+    return service
+
+def list_messages(service):
+    try:
+        response = service.users().messages().list(userId='me').execute()
+        messages = response.get('messages', [])
+
+        for message in messages:
+            msg = service.users().messages().get(userId='me', id=message['id']).execute()
+            print(msg['snippet'])
+
+    except HttpError as error:
+        print(f'An error occurred: {error}')
+        service = None
+
+    return service
+
+if __name__ == '__main__':
+    service = get_service()
+    if service:
+        list_messages(service)
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Gmail.v1;
+using Google.Apis.Gmail.v1.Data;
+using Google.Apis.Services;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+
+class Program
+{
+    static string[] Scopes = { GmailService.Scope.GmailReadonly };
+    static string ApplicationName = "Gmail API .NET Quickstart";
+
+    static void Main(string[] args)
+    {
+        UserCredential credential;
+
+        using (var stream =
+            new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+        {
+            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                GoogleClientSecrets.Load(stream).Secrets,
+                Scopes,
+                "user",
+                CancellationToken.None,
+                new FileDataStore(null)).Result;
+        }
+
+        var
+      
