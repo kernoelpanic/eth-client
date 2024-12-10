@@ -80,7 +80,8 @@ MaxPeers = 50
 NoDiscovery = true
 BootstrapNodes = []
 BootstrapNodesV5 = []
-StaticNodes = ["enode://fd90f39e40633934f1613ab08bd4917d3aa28abba28cc4748b544650cfffe1ab40890f4a9d85ca9c0cf28845633291ca06a5716b86f5232b32374b82e2e3cff6@eth-smart.secenv:30303?discport=0"]
+#StaticNodes = ["enode://fd90f39e40633934f1613ab08bd4917d3aa28abba28cc4748b544650cfffe1ab40890f4a9d85ca9c0cf28845633291ca06a5716b86f5232b32374b82e2e3cff6@eth-smart.secenv:30303?discport=0"]
+StaticNodes = ["enode://fd90f39e40633934f1613ab08bd4917d3aa28abba28cc4748b544650cfffe1ab40890f4a9d85ca9c0cf28845633291ca06a5716b86f5232b32374b82e2e3cff6@127.0.0.1:30303?discport=0"]
 TrustedNodes = []
 ListenAddr = ":30303"
 EnableMsgEvents = false
