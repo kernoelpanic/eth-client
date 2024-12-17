@@ -16,9 +16,7 @@ The directories should exist for `docker-compose up` to work without errors.
 You could add them like this:
 
 ```
-$ mkdir ../keystore
-$ mkdir -p geth/datadir/bob/keystore
-$ mkdir notebook/geth
+$ mkdir ../keystore && mkdir -p geth/datadir/bob/keystore && mkdir -p notebook/geth
 ```
 
 Place your private key file (in json format) in a folder called `../keystore`  outside this repository.

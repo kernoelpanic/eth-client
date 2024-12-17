@@ -1,6 +1,8 @@
 import web3
 import web3.auto as web3auto
-from web3.middleware import geth_poa_middleware
+from web3.middleware import ExtraDataToPOAMiddleware
+# the old way
+#from web3.middleware import geth_poa_middleware
 
 import time
 import threading
@@ -29,8 +31,9 @@ def connect(host=None,port=None,poa=False):
         if poa:
             # inject PoA compatibility
             # the new way
-            w3.middleware_onion.inject(geth_poa_middleware, layer=0)
-            # inject the old way:
+            w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
+            # inject the old ways:
+            #w3.middleware_onion.inject(geth_poa_middleware, layer=0)
             #w3.middleware_stack.inject(geth_poa_middleware, layer=0)
     assert w3.is_connected(), "Connecting to local Ethereum node failed!"
     return w3
@@ -39,8 +42,8 @@ def check_connection(chain_id=None):
     if not w3.is_connected():
         return False
     if (chain_id is not None) and w3.eth.chain_id == chain_id:
-        return False 
-    return True 
+        return False
+    return True
 
 def print_conn_info():
     assert w3.is_connected(),"No w3 connection!"
@@ -54,7 +57,7 @@ def print_conn_info():
     print(f"block ctr = {w3.eth.block_number}")
     print(f"peer ctr  = {w3.net.peer_count}")
     if w3.net.peer_count > 0:
-        for peer in w3.geth.admin.peers(): 
+        for peer in w3.geth.admin.peers():
             print(f"\tname  = {peer['name']}")
             print(f"\tenode = {peer['enode']}")
             print(f"\tip    = {peer['network']['remoteAddress']}")
@@ -81,7 +84,7 @@ def compile_contract_with_libs(compiler_path,src_path,account=None,gas=None,debu
     # We have compiled a contract with dependencies e.g., on libs
     for sfile in compiler_output["contracts"]:
         directory, filename_with_extension = os.path.split(sfile.split(":")[0])
-        if debug: 
+        if debug:
             print(f"src file: {sfile}")
             print(f"src path: {src_path}")
         if src_path.endswith(filename_with_extension):
@@ -100,7 +103,7 @@ def compile_contract_with_libs(compiler_path,src_path,account=None,gas=None,debu
                              "bin_str": compiler_output["contracts"][sfile]["bin"],
                              "abi_str": compiler_output["contracts"][sfile]["abi"] }
 
-    if debug: 
+    if debug:
         print(f"c_bin: {c_bin}")
         print(f"c_abi: {c_abi}")
     for sfile,sdata in c_dep.items():
@@ -199,7 +202,7 @@ def get_contract_instance(
         cabi=compile_contract_with_libs(compiler,path,debug)["abi"]
 
     """
-    # Depricated since v6: 
+    # Depricated since v6:
     #https://web3py.readthedocs.io/en/stable/v5_migration.html#deprecated-concisecontract-and-implicitcontract
     if concise:
         instance = w3.eth.contract(
@@ -263,7 +266,7 @@ def compile_and_deploy_contract(path,
         with custom flags per default: compiler="solc"
         Change to custom path to compiler location if necessary.
     """
-    global w3 
+    global w3
     if w3conn is not None:
         w3 = w3conn
 
@@ -277,7 +280,7 @@ def compile_and_deploy_contract(path,
             w3.eth.default_account = account
 
     # compile manually
-    if debug: 
+    if debug:
         print(f"src path: {path}")
         print(f"compiler path: {compiler}")
     interface = compile_contract_with_libs(compiler_path=compiler,
@@ -310,8 +313,8 @@ def compile_and_deploy_contract(path,
         return tx_hash
 
 # ------------------------------------
-# Bulk deployment and check functions 
-# for the challenge environment 
+# Bulk deployment and check functions
+# for the challenge environment
 
 def persist_users(path,users):
     with open(path,'w') as f_output:
@@ -353,7 +356,7 @@ def forall_compile_and_deploy(users,
             u_addr = force_argument
         else:
             u_addr = w3.to_checksum_address(u["account_address"])
-            
+
         if argument2 is not None and argument2 is True:
             print("~",end="")
             #print("Double sha3 argument2: {}".format(argument2))
@@ -418,14 +421,14 @@ def forall_check_contract(users,
         c_abi = compile_contract_with_libs(compiler_path=compiler,src_path=c_path)["abi"]
         u_c_addr = u[c_name + "_addr"]
         u_c_instance = get_contract_instance(u_c_addr,c_abi,concise=False)
-    
+
         # check owner
         #print(u_c_instance.functions.getStudent().call())
         #print(w3.toChecksumAddress(u["account"]))
-        assert u_c_instance.functions.getStudent().call() == w3.to_checksum_address(u["account_address"])   
+        assert u_c_instance.functions.getStudent().call() == w3.to_checksum_address(u["account_address"])
         # check balance
         u_c_seedvalue = u[c_name + "_seedvalue"]
-        u_c_balance = get_balance(u_c_addr,"wei")   
+        u_c_balance = get_balance(u_c_addr,"wei")
         u[c_name + "_balance"] = u_c_balance
         if predicate(u_c_balance, u_c_seedvalue) == False:
             print("Predicate violation for:\n",u)
@@ -434,7 +437,7 @@ def forall_check_contract(users,
     return users
 
 # ---------------
-# Helper scripts 
+# Helper scripts
 
 def get_balance(address,unit="ether"):
     address = w3.to_checksum_address(address)
@@ -446,8 +449,8 @@ def get_balance(address,unit="ether"):
 def send_ether(_value,_to,_from=None):
     if _from is None:
         _from = w3.eth.default_account
-    tx_hash = w3.eth.send_transaction({'from':_from, 
-                                      'to':_to, 
+    tx_hash = w3.eth.send_transaction({'from':_from,
+                                      'to':_to,
                                       'value':w3.to_wei(_value,"ether")})
     return tx_hash
 
@@ -455,7 +458,7 @@ def write_keystore_file(path,account_json):
     current_time_utc = datetime.now(timezone.utc)
     formatted_timestamp = current_time_utc.strftime("UTC--%Y-%m-%dT%H-%M-%S.%fZ--")
     file_name = formatted_timestamp + account_json["address"]
-    path += file_name 
+    path += file_name
     print(f"writing to {file_name} ...")
     with open(path, 'w') as json_file:
         json.dump(account_json, json_file)
