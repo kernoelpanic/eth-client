@@ -3,7 +3,7 @@
 wheel
 
 ## smart contract related ##
-web3
+web3==6.20.2
 pysha3
 py-solc
 # https://web3py.readthedocs.io/en/stable/web3.contract.html – recommended
