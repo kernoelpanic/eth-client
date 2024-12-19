@@ -52,7 +52,7 @@ def print_conn_info():
     print(f"net   id  = {w3.net.version}")
     print(f"name      = {w3.geth.admin.node_info()['name']}")
     print(f"enode     = {w3.geth.admin.node_info()['enode']}")
-    print(f"mining    = {w3.eth.mining}")
+    #print(f"mining    = {w3.eth.mining}")
     print(f"syncing   = {w3.eth.syncing}")
     print(f"block ctr = {w3.eth.block_number}")
     print(f"peer ctr  = {w3.net.peer_count}")
