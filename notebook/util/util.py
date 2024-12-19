@@ -31,11 +31,11 @@ def connect(host=None,port=None,poa=False):
         if poa:
             # inject PoA compatibility
             # the new way
-            #w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
+            w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 
             # inject the old ways:
-            from web3.middleware import geth_poa_middleware
-            w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+            #from web3.middleware import geth_poa_middleware
+            #w3.middleware_onion.inject(geth_poa_middleware, layer=0)
             #w3.middleware_stack.inject(geth_poa_middleware, layer=0)
     assert w3.is_connected(), "Connecting to local Ethereum node failed!"
     return w3
