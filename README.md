@@ -2,7 +2,14 @@
 
 This ethereum smart contract test environment is used in the lecture [Security and Privacy Engineering](https://ufind.univie.ac.at/en/course.html?lv=052011&semester=2023W) at the university of Vienna.
 
-## For students
+## For the anvil tutorial
+
+Just run
+```bash
+$ docker compose up -d
+```
+
+## For the student challenges 
 
 Make sure to have the following folders created
 relative to the repository folder for the docker volumes:
