@@ -13,7 +13,7 @@ py-solc-x
 
 ## dependencies for interaction with ethereum directly ##
 leveldb
-ethereum # pyethereum
+#ethereum # pyethereum
 
 ## for bitcoin
 bitcoinlib

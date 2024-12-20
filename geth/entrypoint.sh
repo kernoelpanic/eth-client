@@ -7,7 +7,7 @@ pwd
 
 if [ -e ./datadir/bob/initialized ] && [ ! -e ./datadir/bob/initlock ]; then
     echo "Running geth ..."
-    exec geth --config ${WORKDIR_CONTAINER}/config.toml --verbosity 5
+    exec geth --verbosity 5 --networkid '20240101' --config ${WORKDIR_CONTAINER}/config.toml
 else
     # This finishes fasts and terminates
     # container will be restarted by docker compose after termination
