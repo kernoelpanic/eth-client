@@ -449,6 +449,20 @@ def get_balance(address,unit="ether"):
     else:
         return w3.from_wei(w3.eth.get_balance(address),unit)
 
+def is_code(address,_w3=None):
+    if not _w3:
+        _w3 = w3
+    # check if (smart contract) code is deployed at the given address
+    address = _w3.to_checksum_address(address)
+    code = _w3.eth.get_code(address).hex()
+    if code == '':
+        # The address is an Externally Owned Account (EOA) or has no deployed contract
+        return False
+    else:
+        # The address has a smart contract deployed
+        return True
+
+
 def send_ether(_value,_to,_from=None):
     if _from is None:
         _from = w3.eth.default_account
