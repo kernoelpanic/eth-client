@@ -12,11 +12,16 @@ py-solc-x
 #eth-testrpc
 
 ## dependencies for interaction with ethereum directly ##
-leveldb
+#leveldb
 #ethereum # pyethereum
 
 ## for bitcoin
 bitcoinlib
+
+
+# for bootnode.py
+eth_keys
+coincurve
 
 ## other required python packages ##
 #py-ecc
