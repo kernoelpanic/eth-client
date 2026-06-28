@@ -26,6 +26,7 @@ services:
   geth-client:
     # geth execution node client, used to connect to other geth nodes (i.e., our PoA node)
     container_name: geth-client-cnt
+    platform: linux/amd64
     build:
       context: ./geth
       dockerfile: ./Containerfile
